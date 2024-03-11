@@ -1,0 +1,9 @@
+name: syntheseus
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy
+  - pip
+  - python>=3.7  # ideally 3.9+
+  - rdkit
