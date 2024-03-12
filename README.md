@@ -1,68 +1,22 @@
-<div align="center">
-    <img src="https://github.com/microsoft/syntheseus/assets/61470923/f01a9939-61fa-4461-a124-c13eddcdd75a" height="50px">
-    <h3><i>Navigating the labyrinth of synthesis planning</i></h3>
-</div>
+# SimpRetro
+SimpRetro is a simplified retrosynthesis planning tool which replaced the intricate single-step models with a straightforward template enumeration approach for retrosynthetic route planning on a real-world drug molecule dataset.
 
----
+The foundation of this code is built upon Syntheseus (version 0.3.0), a retrosynthesis framework developed by Microsoft Research, which can be found at [Microsoft's Syntheseus repository](https://github.com/microsoft/syntheseus/).
 
-[![CI](https://github.com/microsoft/syntheseus/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/microsoft/syntheseus/actions/workflows/ci.yml)
-[![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
-[![code style](https://img.shields.io/badge/code%20style-black-202020.svg)](https://github.com/ambv/black)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/microsoft/syntheseus/blob/main/LICENSE)
+## Environment Setup
 
-Syntheseus is a package for end-to-end retrosynthetic planning.
-- ⚒️ Combines search algorithms and reaction models in a standardized way
-- 🧭 Includes implementations of common search algorithms
-- 🧪 Includes wrappers for state-of-the-art reaction models
-- ⚙️ Exposes a simple API to plug in custom models and algorithms
-- 📈 Can be used to benchmark components of a retrosynthesis pipeline
+To set up the required environment, please follow the instructions provided by Syntheseus. Specifically, for the results we have presented, you will need to set up the environments for both LocalRetro and RootAligned.
 
-To learn about `syntheseus`'s features and API visit [microsoft.github.io/syntheseus](https://microsoft.github.io/syntheseus).
+The single-step templates used in our approach are stored within `filtered_canonical_templates.json`. The test molecules, sourced from DrugHunter's Molecules of the Month, are available in `SMILES.txt`. Our in-stock molecules dataset can be downloaded [here](https://drive.google.com/file/d/1x33LmAizIdA5Dgw7IJp7_k7gRdNVv5cT/view?usp=sharing)
 
-## Quick Start
+Additionally, please ensure the installation of the C++ version of RDChiral by running the following command: `conda install -c conda-forge -c ljn917 rdchiral_cpp`.
 
-To install `syntheseus` with all the extras, run
+## Usage Instructions
+
+To replicate the results presented in our paper, execute the script using `sh run_search.sh`.
+
+If you wish to use SimpRetro for generating retrosynthetic routes for your own targets, ensure that your target molecules are saved in `targets.txt` and you wish to save the results in the `results/` directory. You can run the following command:
 
 ```bash
-conda env create -f environment_full.yml
-conda activate syntheseus-full
-
-pip install -e ".[all]"
+python syntheseus/cli/search.py inventory_smiles_file=targets.txt search_targets_file=SMILES.txt model_class=NoModel model_dir=filtered_canonical_templates.json time_limit_s=1800 search_algorithm=mcts results_dir=results/
 ```
-
-See [documentation](https://microsoft.github.io/syntheseus/installation) if you prefer a more lightweight installation that only includes the parts you actually need.
-
-## Development
-
-Syntheseus is currently under active development.
-If you want to help us develop syntheseus please install and run `pre-commit`
-checks before committing code.
-
-We use `pytest` for testing. Please make sure tests pass on your branch before
-submitting a PR (and try to maintain high test coverage).
-
-```bash
-python -m pytest --cov syntheseus/tests
-```
-
-## Contributing
-
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
-
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-## Trademarks
-
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft
-trademarks or logos is subject to and must follow
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.

@@ -1,0 +1,7 @@
+for i in 0
+do
+    nohup python syntheseus/cli/search.py inventory_smiles_file=emolecules.txt search_targets_file=SMILES.txt model_class=NoModel model_dir=filtered_canonical_templates.json time_limit_s=1800 search_algorithm=mcts results_dir=mcts_results/ > logs/search_No_Model_$i.txt &
+    nohup python syntheseus/cli/search.py inventory_smiles_file=emolecules.txt search_targets_file=SMILES.txt model_class=NeuralSym model_dir=syntheseus/reaction_prediction/environments/external/neuralsym/models/ time_limit_s=1800 results_dir=mcts_results/ > logs/search_neuralsym_$i.txt &
+    nohup python syntheseus/cli/search.py inventory_smiles_file=emolecules.txt search_targets_file=SMILES.txt model_class=RootAligned model_dir=syntheseus/reaction_prediction/environments/external/root_aligned/models/full time_limit_s=1800 results_dir=mcts_results/ search_algorithm=mcts > logs/search_rootaligned_$i.txt &
+    nohup python syntheseus/cli/search.py inventory_smiles_file=emolecules.txt search_targets_file=SMILES.txt model_class=LocalRetro model_dir=syntheseus/reaction_prediction/environments/external/local_retro/models/MIT time_limit_s=1800 results_dir=mcts_results/ search_algorithm=mcts > logs/search_localretro_$i.txt &
+done
