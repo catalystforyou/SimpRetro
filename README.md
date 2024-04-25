@@ -18,5 +18,5 @@ To replicate the results presented in our paper, execute the script using `sh ru
 If you wish to use SimpRetro for generating retrosynthetic routes for your own targets, ensure that your target molecules are saved in `targets.txt` and you wish to save the results in the `results/` directory. You can run the following command:
 
 ```bash
-python syntheseus/cli/search.py inventory_smiles_file=targets.txt search_targets_file=SMILES.txt model_class=NoModel model_dir=filtered_canonical_templates.json time_limit_s=1800 search_algorithm=mcts results_dir=results/
+python syntheseus/cli/search.py inventory_smiles_file=emolecules.txt search_targets_file=targets.txt model_class=NoModel model_dir=USPTO_full_train_2.json time_limit_s=1800 search_algorithm=mcts results_dir=results/
 ```

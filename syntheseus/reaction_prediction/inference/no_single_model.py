@@ -57,7 +57,8 @@ def RDScore(p_mol, r_mols):
         return 1
     else:
         return 0
-    
+
+
 def canonical_smiles(smiles):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
@@ -71,7 +72,6 @@ class NoModel(BackwardReactionModel):
         self,
         model_dir: Union[str, Path],
         device):
-        """Initializes the NeuralSym model wrapper."""
         self.templates_raw = json.load(open(model_dir)) # list(set(pd.read_csv(model_dir, sep='\t').retro_template.values))
         print(f'Total Number of Templates: {len(self.templates_raw)}')
         self.template_list = []
@@ -91,6 +91,7 @@ class NoModel(BackwardReactionModel):
             result_set = set([])
             p_mol = Chem.MolFromSmiles(x.smiles)
             p_mol_rdchiral = rdchiralReactants(x.smiles)
+            # p_num_rings = numRing(p_mol)
             for template, template_raw in zip(self.template_list, self.templates_raw):
                 mapped_curr_results = rdchiralRun(template, p_mol_rdchiral, keep_mapnums=True)
                 for r in mapped_curr_results:
@@ -100,10 +101,9 @@ class NoModel(BackwardReactionModel):
                     result_set.add(canonical_r)
                     r_mols = [Chem.MolFromSmiles(r_) for r_ in canonical_r.split('.')]
                     r_smls = canonical_r.split('.')
-                    score = 1 * (w1 * CDScore(p_mol, r.split('.')) + w2 * ASScore(r_smls, self.instock_list) + w3 * RDScore(p_mol, r_mols) + w4 * 1 / len(r))
-                    # score = 1 * (w1 * CDScore_old(p_mol, r_mols) + w2 * ASScore(r_smls, self.instock_list) + w3 * RDScore(p_mol, r_mols) + w4 * 1 / len(r))
+                    score = 1 * (w1 * CDScore(p_mol, r.split('.')) + w2 * ASScore(r_smls, self.instock_list) + w3 * RDScore(p_mol, r_mols) + w4 * 1 / len(mapped_curr_results))
                     results[canonical_r] = (score, template_raw)
-            results = sorted(results.items(), key=lambda item: item[1][0], reverse=True)
+            results = sorted(results.items(), key=lambda item: item[1][0], reverse=True)[:num_results]
             if not len(results) == 0:
                 reactants, scores = zip(*results)
                 templates = [t[1] for t in scores]
