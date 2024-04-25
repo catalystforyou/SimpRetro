@@ -7,7 +7,7 @@ The foundation of this code is built upon Syntheseus (version 0.3.0), a retrosyn
 
 To set up the required environment, please follow the instructions provided by Syntheseus. Specifically, for the results we have presented, you will need to set up the environments for both LocalRetro and RootAligned.
 
-The single-step templates used in our approach are stored within `filtered_canonical_templates.json`. The test molecules, sourced from DrugHunter's Molecules of the Month, are available in `SMILES.txt`. Our in-stock molecules dataset can be downloaded [here](https://drive.google.com/file/d/1x33LmAizIdA5Dgw7IJp7_k7gRdNVv5cT/view?usp=sharing)
+The single-step templates used in our approach are stored within `USPTO_full_train_2.json`. The test molecules, sourced from DrugHunter's Molecules of the Month, are available in `SMILES.txt`. Our in-stock molecules dataset can be downloaded [here](https://drive.google.com/file/d/1x33LmAizIdA5Dgw7IJp7_k7gRdNVv5cT/view?usp=sharing).
 
 Additionally, please ensure the installation of the C++ version of RDChiral by running the following command: `conda install -c conda-forge -c ljn917 rdchiral_cpp`.
 
