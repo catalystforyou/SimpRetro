@@ -109,7 +109,7 @@ def canonical_smiles(smiles):
         atom.SetAtomMapNum(0)
     return Chem.MolToSmiles(Chem.MolFromSmiles(Chem.MolToSmiles(mol)))
 
-class NoModel(BackwardReactionModel):
+class SimpRetro(BackwardReactionModel):
     def __init__(
         self,
         model_dir: Union[str, Path],

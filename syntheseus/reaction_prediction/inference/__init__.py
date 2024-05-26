@@ -6,7 +6,7 @@ from syntheseus.reaction_prediction.inference.mhnreact import MHNreactModel
 from syntheseus.reaction_prediction.inference.retro_knn import RetroKNNModel
 from syntheseus.reaction_prediction.inference.root_aligned import RootAlignedModel
 from syntheseus.reaction_prediction.inference.neuralsym import NeuralSymModel
-from syntheseus.reaction_prediction.inference.no_single_model import NoModel
+from syntheseus.reaction_prediction.inference.simpretro import SimpRetro
 
 __all__ = [
     "ChemformerModel",
@@ -17,5 +17,5 @@ __all__ = [
     "RetroKNNModel",
     "RootAlignedModel",
     'NeuralSymModel',
-    'NoModel'
+    'SimpRetro',
 ]
