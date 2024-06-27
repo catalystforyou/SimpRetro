@@ -100,6 +100,10 @@ def smiles_to_fingerprint(smiles, fp_length=2048, radius=2):
     mol = Chem.MolFromSmiles(smiles)
     return np.array(AllChem.GetMorganFingerprintAsBitVect(mol, radius, nBits=fp_length)).reshape(1, -1)
 
+def smarts_to_fingerprint(smarts):
+    rxn = AllChem.ReactionFromSmarts(smarts)
+    return np.concatenate([np.array(AllChem.CreateDifferenceFingerprintForReaction(rxn).ToList()).reshape(1, -1), np.array(AllChem.CreateStructuralFingerprintForReaction(rxn).ToList()).reshape(1, -1)], axis=1)
+
 
 def canonical_smiles(smiles):
     mol = Chem.MolFromSmiles(smiles)
@@ -122,7 +126,14 @@ class SimpRetro(BackwardReactionModel):
             self.template_list.append(rdchiralReaction(rule))
         self.fingerprint_base = pickle.load(open('fast_filter/fingerprint_base.pkl', 'rb')) if os.path.exists('fast_filter/fingerprint_base.pkl') else {}
         self.instock_list = set(open('emolecules.txt').read().split('\n'))
-        self.template_fps = np.array([self.fingerprint_base.get(template) for template in self.templates_raw])
+        self.template_fps = []
+        for template in self.templates_raw:
+            if template in self.fingerprint_base:
+                self.template_fps.append(self.fingerprint_base[template])
+            else:
+                self.template_fps.append(smarts_to_fingerprint(template))
+                self.fingerprint_base[template] = smarts_to_fingerprint(template)
+        self.template_fps = np.array(self.template_fps)
         self.filter = Net_orig()
         self.filter.load_state_dict(torch.load('fast_filter/model_smoothbce.pth', map_location='cpu'))
 
@@ -166,7 +177,7 @@ class SimpRetro(BackwardReactionModel):
                     else:
                         pass 
             except:
-                print(valid_temp_fps)
+                # print(valid_temp_fps)
                 validated_results = {}
             results = sorted(validated_results.items(), key=lambda item: item[1][0] + 0.001 * item[1][-1], reverse=True)[:50]
             if not len(results) == 0:
